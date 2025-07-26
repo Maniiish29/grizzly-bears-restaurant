@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grizzly Bears - Fine Dining</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #131410;
+            background: linear-gradient(135deg, #8fa768 0%, #7d9456 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 60px 0 40px;
+            border-bottom: 1px solid rgba(241, 195, 222, 0.3);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            color: #2c2c2c;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tagline {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 8px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            margin: 0 5px;
+            border: none;
+            background: transparent;
+            color: #2c2c2c;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 40px;
+            transition: all 0.3s ease;
+            font-weight: 300;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #8fa768;
+            font-weight: 400;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Menu Styles */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 40px 0;
+        }
+
+        .menu-section {
+            background: rgba(234, 236, 231, 0.95);
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c2c2c;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 40px;
+            height: 2px;
+            background: #8fa768;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .menu-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateX(10px);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .item-name {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #8fa768;
+        }
+
+        .item-price {
+            font-size: 0.9rem;
+            color: #0a0a08;
+            font-weight: 500;
+        }
+
+        .item-description {
+            font-size: 0.85rem;
+            color: #888;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .add-to-cart {
+            background: #8fa768;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            background: #7d9456;
+            transform: scale(1.05);
+        }
+
+        /* Order Form */
+        .order-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .cart-items {
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-align: right;
+            padding: 20px 0;
+            border-top: 2px solid #8fa768;
+            color: #8fa768;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c2c2c;
+            font-weight: 400;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #8fa768;
+        }
+
+        .btn-primary {
+            background: #8fa768;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+
+        .btn-primary:hover {
+            background: #7d9456;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #8fa768;
+            border: 2px solid #8fa768;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #8fa768;
+            color: white;
+        }
+
+        /* Reservation Form */
+        .reservation-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-row {
+            grid-column: 1 / -1;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid rgba(224, 224, 224, 0.3);
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 60px;
+        }
+
+        .contact-info {
+            margin-bottom: 15px;
+        }
+
+        .hours {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+            }
+            
+            .tab-btn {
+                margin: 5px 0;
+                width: 200px;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .menu-section {
+                padding: 30px 20px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .order-section {
+                padding: 20px;
+            }
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            padding: 40px 0;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .quantity-btn {
+            background: #8fa768;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #c3e6cb;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">GRIZZLY BEARS</h1>
+            <p class="tagline">Contemporary Fine Dining</p>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('menu', event)">Menu</button>
+            <button class="tab-btn" onclick="showTab('order', event)">Place Order</button>
+            <button class="tab-btn" onclick="showTab('reservation', event)">Reservation</button>
+        </nav>
+
+        <div id="menu" class="tab-content active">
+            <section class="about">
+                <h2>Our Philosophy</h2>
+                <p>At Grizzly Bears, we believe in the art of simplicity. Our culinary team crafts each dish using the finest seasonal ingredients, sourced locally and prepared with precision. We strip away the unnecessary to reveal the pure essence of flavor, creating an unforgettable dining experience that celebrates both tradition and innovation.</p>
+            </section>
+
+            <main class="menu-grid">
+                <section class="menu-section">
+                    <h2 class="section-title">Appetizers</h2>
+                    <div class="menu-item" data-item="Burrata & Heirloom Tomatoes" data-price="300">
+                        <div class="item-header">
+                            <h3 class="item-name">Burrata & Heirloom Tomatoes</h3>
+                            <span class="item-price">₹300</span>
+                        </div>
+                        <p class="item-description">Creamy burrata with roasted heirloom tomatoes, basil oil, and aged balsamic</p>
+                        <button class="add-to-cart" onclick="addToCart('Burrata & Heirloom Tomatoes', 300)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Tuna Tartare" data-price="450">
+                        <div class="item-header">
+                            <h3 class="item-name">Tuna Tartare</h3>
+                            <span class="item-price">₹450</span>
+                        </div>
+                        <p class="item-description">Fresh yellowfin tuna with avocado, cucumber, and sesame-miso dressing</p>
+                        <button class="add-to-cart" onclick="addToCart('Tuna Tartare', 450)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Duck Liver Mousse" data-price="480">
+                        <div class="item-header">
+                            <h3 class="item-name">Duck Liver Mousse</h3>
+                            <span class="item-price">₹480</span>
+                        </div>
+                        <p class="item-description">Silky mousse with caramelized onions, brioche toast, and cherry compote</p>
+                        <button class="add-to-cart" onclick="addToCart('Duck Liver Mousse', 480)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Oysters" data-price="360">
+                        <div class="item-header">
+                            <h3 class="item-name">Oysters</h3>
+                            <span class="item-price">₹360 each</span>
+                        </div>
+                        <p class="item-description">Selection of East and West Coast oysters with traditional mignonette</p>
+                        <button class="add-to-cart" onclick="addToCart('Oysters', 360)">Add to Cart</button>
+                    </div>
+                </section>
+
+                <section class="menu-section">
+                    <h2 class="section-title">Main Courses</h2>
+                    <div class="menu-item" data-item="Wagyu Beef Tenderloin" data-price="780">
+                        <div class="item-header">
+                            <h3 class="item-name">Wagyu Beef Tenderloin</h3>
+                            <span class="item-price">₹780</span>
+                        </div>
+                        <p class="item-description">8oz A5 wagyu with roasted bone marrow, fingerling potatoes, and red wine jus</p>
+                        <button class="add-to-cart" onclick="addToCart('Wagyu Beef Tenderloin', 780)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Atlantic Halibut" data-price="340">
+                        <div class="item-header">
+                            <h3 class="item-name">Atlantic Halibut</h3>
+                            <span class="item-price">₹340</span>
+                        </div>
+                        <p class="item-description">Pan-seared halibut with cauliflower purée, sautéed spinach, and lemon beurre blanc</p>
+                        <button class="add-to-cart" onclick="addToCart('Atlantic Halibut', 340)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Duck Breast" data-price="380">
+                        <div class="item-header">
+                            <h3 class="item-name">Duck Breast</h3>
+                            <span class="item-price">₹380</span>
+                        </div>
+                        <p class="item-description">Roasted duck breast with cherry gastrique, wild rice, and seasonal vegetables</p>
+                        <button class="add-to-cart" onclick="addToCart('Duck Breast', 380)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Vegetable Tasting" data-price="325">
+                        <div class="item-header">
+                            <h3 class="item-name">Vegetable Tasting</h3>
+                            <span class="item-price">₹325</span>
+                        </div>
+                        <p class="item-description">Chef's selection of seasonal vegetables prepared three ways with herb oil</p>
+                        <button class="add-to-cart" onclick="addToCart('Vegetable Tasting', 325)">Add to Cart</button>
+                    </div>
+                </section>
+
+                <section class="menu-section">
+                    <h2 class="section-title">Desserts</h2>
+                    <div class="menu-item" data-item="Dark Chocolate Soufflé" data-price="160">
+                        <div class="item-header">
+                            <h3 class="item-name">Dark Chocolate Soufflé</h3>
+                            <span class="item-price">₹160</span>
+                        </div>
+                        <p class="item-description">Warm chocolate soufflé with vanilla bean ice cream and gold leaf</p>
+                        <button class="add-to-cart" onclick="addToCart('Dark Chocolate Soufflé', 160)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Lemon Tart" data-price="140">
+                        <div class="item-header">
+                            <h3 class="item-name">Lemon Tart</h3>
+                            <span class="item-price">₹140</span>
+                        </div>
+                        <p class="item-description">Meyer lemon curd tart with toasted meringue and candied lemon zest</p>
+                        <button class="add-to-cart" onclick="addToCart('Lemon Tart', 140)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Cheese Selection" data-price="200">
+                        <div class="item-header">
+                            <h3 class="item-name">Cheese Selection</h3>
+                            <span class="item-price">₹200</span>
+                        </div>
+                        <p class="item-description">Artisanal cheese board with honeycomb, nuts, and seasonal fruit</p>
+                        <button class="add-to-cart" onclick="addToCart('Cheese Selection', 200)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Seasonal Sorbet" data-price="220">
+                        <div class="item-header">
+                            <h3 class="item-name">Seasonal Sorbet</h3>
+                            <span class="item-price">₹220</span>
+                        </div>
+                        <p class="item-description">Chef's daily selection of house-made sorbets and granitas</p>
+                        <button class="add-to-cart" onclick="addToCart('Seasonal Sorbet', 220)">Add to Cart</button>
+                    </div>
+                </section>
+
+                <section class="menu-section">
+                    <h2 class="section-title">Beverages</h2>
+                    <div class="menu-item" data-item="Wine Pairing" data-price="300">
+                        <div class="item-header">
+                            <h3 class="item-name">Wine Pairing</h3>
+                            <span class="item-price">₹300</span>
+                        </div>
+                        <p class="item-description">Three-course wine pairing selected by our sommelier</p>
+                        <button class="add-to-cart" onclick="addToCart('Wine Pairing', 300)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Craft Cocktails" data-price="165">
+                        <div class="item-header">
+                            <h3 class="item-name">Craft Cocktails</h3>
+                            <span class="item-price">₹150-180</span>
+                        </div>
+                        <p class="item-description">House-crafted cocktails featuring premium spirits and fresh ingredients</p>
+                        <button class="add-to-cart" onclick="addToCart('Craft Cocktails', 165)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Artisan Coffee" data-price="250">
+                        <div class="item-header">
+                            <h3 class="item-name">Artisan Coffee</h3>
+                            <span class="item-price">₹250</span>
+                        </div>
+                        <p class="item-description">Single-origin coffee beans roasted locally, espresso or pour-over</p>
+                        <button class="add-to-cart" onclick="addToCart('Artisan Coffee', 250)">Add to Cart</button>
+                    </div>
+                    <div class="menu-item" data-item="Premium Tea Selection" data-price="260">
+                        <div class="item-header">
+                            <h3 class="item-name">Premium Tea Selection</h3>
+                            <span class="item-price">₹260</span>
+                        </div>
+                        <p class="item-description">Curated collection of loose-leaf teas from around the world</p>
+                        <button class="add-to-cart" onclick="addToCart('Premium Tea Selection', 260)">Add to Cart</button>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <div id="order" class="tab-content">
+            <div class="order-section">
+                <h2>Your Order</h2>
+                <div class="cart-items" id="cartItems">
+                    <div class="empty-cart">Your cart is empty. Add items from the menu to get started!</div>
+                </div>
+                <div class="cart-total" id="cartTotal">Total: ₹0</div>
+                <div id="orderSuccessMessage" class="success-message"></div>
+                
+                <form id="orderForm" onsubmit="submitOrder(event)">
+                    <h3 style="margin-bottom: 20px;">Delivery Information</h3>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Address</label>
+                        <textarea name="address" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Delivery Time</label>
+                        <select name="deliveryTime" required>
+                            <option value="">Select Time</option>
+                            <option value="asap">ASAP (45-60 minutes)</option>
+                            <option value="7pm">7:00 PM</option>
+                            <option value="730pm">7:30 PM</option>
+                            <option value="8pm">8:00 PM</option>
+                            <option value="830pm">8:30 PM</option>
+                            <option value="9pm">9:00 PM</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Special Instructions</label>
+                        <textarea name="instructions" rows="2" placeholder="Any special requests or dietary restrictions?"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Place Order</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="reservation" class="tab-content">
+            <div class="order-section">
+                <h2>Make a Reservation</h2>
+                <p style="margin-bottom: 30px; color: #666;">Reserve your table at Grizzly Bears for an unforgettable dining experience.</p>
+                <div id="reservationSuccessMessage" class="success-message"></div>
+                
+                <form id="reservationForm" onsubmit="submitReservation(event)">
+                    <div class="reservation-form">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Party Size</label>
+                            <select name="partySize" required>
+                                <option value="">Select Size</option>
+                                <option value="1">1 Person</option>
+                                <option value="2">2 People</option>
+                                <option value="3">3 People</option>
+                                <option value="4">4 People</option>
+                                <option value="5">5 People</option>
+                                <option value="6">6 People</option>
+                                <option value="7">7 People</option>
+                                <option value="8">8 People</option>
+                                <option value="more">More than 8</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Date</label>
+                            <input type="date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Time</label>
+                            <select name="time" required>
+                                <option value="">Select Time</option>
+                                <option value="530pm">5:30 PM</option>
+                                <option value="6pm">6:00 PM</option>
+                                <option value="630pm">6:30 PM</option>
+                                <option value="7pm">7:00 PM</option>
+                                <option value="730pm">7:30 PM</option>
+                                <option value="8pm">8:00 PM</option>
+                                <option value="830pm">8:30 PM</option>
+                                <option value="9pm">9:00 PM</option>
+                                <option value="930pm">9:30 PM</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-row">
+                            <label>Special Occasion</label>
+                            <select name="occasion">
+                                <option value="">None</option>
+                                <option value="birthday">Birthday</option>
+                                <option value="anniversary">Anniversary</option>
+                                <option value="business">Business Dinner</option>
+                                <option value="date">Date Night</option>
+                                <option value="celebration">Special Celebration</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-row">
+                            <label>Special Requests</label>
+                            <textarea name="requests" rows="3" placeholder="Dietary restrictions, seating preferences, or other special requests..."></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Make Reservation</button>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            <div class="contact-info">
+                <p>123 Culinary Avenue, Downtown District | 555-ESSENCE</p>
+                <p>reservations@grizzlybearsrestaurant.com</p>
+            </div>
+            <div class="hours">
+                <p>Tuesday - Saturday: 5:30 PM - 10:00 PM | Sunday: 5:30 PM - 9:00 PM</p>
+                <p>Closed Mondays</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        let cart = {};
+        let total = 0;
+
+        // Function to switch between tabs
+        function showTab(tabName, event) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active class from all tab buttons
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab button
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+
+            // If switching to the order tab, ensure cart display is updated
+            if (tabName === 'order') {
+                updateCartDisplay();
+            }
+        }
+
+        // Function to add items to the cart
+        function addToCart(itemName, price) {
+            if (cart[itemName]) {
+                cart[itemName].quantity += 1;
+            } else {
+                cart[itemName] = {
+                    price: price,
+                    quantity: 1
+                };
+            }
+            updateCartDisplay();
+            alert(`${itemName} added to cart!`); // Provide quick feedback
+        }
+
+        // Function to decrease quantity of an item in the cart
+        function removeFromCart(itemName) {
+            if (cart[itemName] && cart[itemName].quantity > 1) {
+                cart[itemName].quantity -= 1;
+            } else {
+                delete cart[itemName]; // Remove item if quantity goes to 0
+            }
+            updateCartDisplay();
+        }
+
+        // Function to remove an item completely from the cart
+        function removeItemCompletely(itemName) {
+            delete cart[itemName];
+            updateCartDisplay();
+        }
+
+        // Function to update the cart display on the 'Place Order' tab
+        function updateCartDisplay() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const cartTotalDiv = document.getElementById('cartTotal');
+            total = 0;
+            let cartHtml = '';
+
+            if (Object.keys(cart).length === 0) {
+                cartItemsDiv.innerHTML = '<div class="empty-cart">Your cart is empty. Add items from the menu to get started!</div>';
+            } else {
+                for (const item in cart) {
+                    const itemData = cart[item];
+                    const itemTotalPrice = itemData.price * itemData.quantity;
+                    total += itemTotalPrice;
+
+                    cartHtml += `
+                        <div class="cart-item">
+                            <span>${item} (₹${itemData.price} x ${itemData.quantity})</span>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="removeFromCart('${item}')">-</button>
+                                <span class="quantity">${itemData.quantity}</span>
+                                <button class="quantity-btn" onclick="addToCart('${item}', ${itemData.price})">+</button>
+                                <button class="btn-secondary" onclick="removeItemCompletely('${item}')">Remove</button>
+                            </div>
+                            <span>₹${itemTotalPrice}</span>
+                        </div>
+                    `;
+                }
+                cartItemsDiv.innerHTML = cartHtml;
+            }
+            cartTotalDiv.textContent = `Total: ₹${total}`;
+        }
+
+        // Function to handle order submission
+        function submitOrder(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const orderSuccessMessage = document.getElementById('orderSuccessMessage');
+
+            if (Object.keys(cart).length === 0) {
+                orderSuccessMessage.style.display = 'block';
+                orderSuccessMessage.className = 'success-message'; // Reset class for styling
+                orderSuccessMessage.style.backgroundColor = '#f8d7da'; // Light red for error
+                orderSuccessMessage.style.color = '#721c24'; // Dark red for error text
+                orderSuccessMessage.style.borderColor = '#f5c6cb'; // Red border
+                orderSuccessMessage.innerHTML = '&#9888; Your cart is empty. Please add items before placing an order.';
+                return;
+            }
+
+            const formData = new FormData(event.target);
+            const orderDetails = {
+                customerName: formData.get('name'),
+                phoneNumber: formData.get('phone'),
+                email: formData.get('email'),
+                deliveryAddress: formData.get('address'),
+                deliveryTime: formData.get('deliveryTime'),
+                specialInstructions: formData.get('instructions'),
+                items: cart,
+                totalAmount: total
+            };
+
+            // In a real application, you would send `orderDetails` to a server here.
+            // For this demonstration, we'll just log it and show a success message.
+            console.log('Order Details:', orderDetails);
+
+            orderSuccessMessage.style.display = 'block';
+            orderSuccessMessage.className = 'success-message'; // Reset class for styling
+            orderSuccessMessage.style.backgroundColor = ''; // Reset to default green
+            orderSuccessMessage.style.color = ''; // Reset to default green text
+            orderSuccessMessage.style.borderColor = ''; // Reset border
+            orderSuccessMessage.innerHTML = `&#10004; Order placed successfully!<br>
+                                            Thank you, <b>${orderDetails.customerName}</b>, for your order totaling <b>₹${orderDetails.totalAmount}</b>.<br>
+                                            Your meal will be delivered to <b>${orderDetails.deliveryAddress}</b> by <b>${orderDetails.deliveryTime === 'asap' ? 'ASAP (45-60 minutes)' : orderDetails.deliveryTime.toUpperCase()}</b>.`;
+            
+            // Clear the cart after successful order
+            cart = {};
+            total = 0;
+            updateCartDisplay();
+            event.target.reset(); // Reset the form fields
+            
+            // Hide the message after a few seconds
+            setTimeout(() => {
+                orderSuccessMessage.style.display = 'none';
+            }, 7000);
+        }
+
+        // Function to handle reservation submission
+        function submitReservation(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const reservationSuccessMessage = document.getElementById('reservationSuccessMessage');
+
+            const formData = new FormData(event.target);
+            const reservationDetails = {
+                customerName: formData.get('name'),
+                phoneNumber: formData.get('phone'),
+                email: formData.get('email'),
+                partySize: formData.get('partySize'),
+                preferredDate: formData.get('date'),
+                preferredTime: formData.get('time'),
+                specialOccasion: formData.get('occasion'),
+                specialRequests: formData.get('requests')
+            };
+
+            // In a real application, you would send `reservationDetails` to a server here.
+            // For this demonstration, we'll just log it and show a success message.
+            console.log('Reservation Details:', reservationDetails);
+
+            reservationSuccessMessage.style.display = 'block';
+            reservationSuccessMessage.className = 'success-message'; // Reset class for styling
+            reservationSuccessMessage.style.backgroundColor = ''; // Reset to default green
+            reservationSuccessMessage.style.color = ''; // Reset to default green text
+            reservationSuccessMessage.style.borderColor = ''; // Reset border
+            reservationSuccessMessage.innerHTML = `&#10004; Reservation successful!<br>
+                                            Thank you, <b>${reservationDetails.customerName}</b>! Your table for <b>${reservationDetails.partySize}</b>
+                                            on <b>${reservationDetails.preferredDate}</b> at <b>${reservationDetails.preferredTime.toUpperCase()}</b> has been confirmed.
+                                            We look forward to seeing you!`;
+
+            event.target.reset(); // Reset the form fields
+
+            // Hide the message after a few seconds
+            setTimeout(() => {
+                reservationSuccessMessage.style.display = 'none';
+            }, 7000);
+        }
+
+        // Initialize cart display when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartDisplay();
+        });
+    </script>
+</body>
+</html>
